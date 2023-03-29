@@ -95,9 +95,7 @@ REQUIREMENTS = ("numpy >= 1.24.2",)
 EXTRAS_REQUIRE = {
     "full": ["matplotlib >= 3.4.3", "scipy >= 1.10.1", "sympy >= 1.11.1"],
 }
-DESCRIPTION = (
-    "Helper for B\u00e9zier Curves, Triangles, and Higher Order Objects"
-)
+DESCRIPTION = "Helper for B\u00e9zier Curves, Triangles, and Higher Order Objects"
 _IS_WINDOWS = os.name == "nt"
 _IS_PYPY = sys.implementation.name == "pypy"
 _EXTRA_DLL = "extra-dll"
@@ -143,38 +141,7 @@ def _sha256_short_hash(filename):
 
 
 def extension_modules():
-    if os.environ.get(READTHEDOCS_ENV) == "True":
-        print(ON_READTHEDOCS_MESSAGE, file=sys.stderr, end="")
-        return []
-
-    if NO_EXTENSION_ENV in os.environ:
-        print(NO_SPEEDUPS_MESSAGE, file=sys.stderr, end="")
-        return []
-
-    install_prefix = os.environ.get(INSTALL_PREFIX_ENV)
-    if install_prefix is None:
-        print(NO_INSTALL_PREFIX_MESSAGE, file=sys.stderr, end="")
-        sys.exit(1)
-
-    rpath = os.path.join(install_prefix, "lib")
-    if not os.path.isdir(rpath):
-        rpath = os.path.join(install_prefix, "lib64")
-    extra_link_args = []
-    if not _IS_WINDOWS:
-        extra_link_args.append("-Wl,-rpath,{}".format(rpath))
-
-    extension = setuptools.Extension(
-        "bezier._speedup",
-        [os.path.join("src", "python", "bezier", "_speedup.c")],
-        include_dirs=[
-            numpy_include_dir(),
-            os.path.join(install_prefix, "include"),
-        ],
-        libraries=["bezier"],
-        library_dirs=[rpath],
-        extra_link_args=extra_link_args,
-    )
-    return [extension]
+    return []
 
 
 def make_readme():
